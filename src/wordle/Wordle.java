@@ -8,8 +8,8 @@ import java.util.*;
 
 public class Wordle {
 
-    String fileName = "wordle/resources/dictionary.txt";
-    //String fileName = "wordle/resources/extended-dictionary.txt";
+    String fileName = "/Users/leo/Desktop/Software_Engineering_Project1/datastructures20280-23/wordle/resources/dictionary.txt";
+    //String fileName = "/Users/leo/Desktop/Software_Engineering_Project1/datastructures20280-23/wordle/resources/extended-dictionary.txt";
     List<String> dictionary = null;
     final int num_guesses = 5;
     final long seed = 42;
