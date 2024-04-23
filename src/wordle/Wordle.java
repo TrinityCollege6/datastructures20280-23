@@ -54,12 +54,25 @@ public class Wordle {
                 return;
             }
 
+            String[] guessArray = new String[5];
+            String[] targetArray = new String[5];
+
+            for(int j = 0; j < 5; j ++)
+            {
+                guessArray[i] = String.valueOf(guess.charAt(i));
+                targetArray[i] = String.valueOf(target.charAt(i));
+            }
+
             // the hint is a string where green="+", yellow="o", grey="_"
             // didn't win ;(
             String [] hint = {"_", "_", "_", "_", "_"};
 
             for (int k = 0; k < 5; k++) {
                 // TODO:
+                if(targetArray[k].equals(guessArray[k]))
+                {
+                    hint[k] = "+";
+                }
             }
 
             // set the arrays for yellow (present but not in right place), grey (not present)
@@ -68,7 +81,13 @@ public class Wordle {
             //  else check if the letter is present in the target word. If yes, set to "o" (yellow)
             for (int k = 0; k < 5; k++) {
                 // TODO:
-
+                for(int j = 0; j < 5; j ++)
+                {
+                    if(guessArray[k].equals(targetArray[j]) && !(hint[j].equals("+")))
+                    {
+                        hint[k] = "o";
+                    }
+                }
             }
 
             // after setting the yellow and green positions, the remaining hint positions must be "not present" or "_"
