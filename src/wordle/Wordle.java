@@ -1,16 +1,14 @@
 package wordle;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Wordle {
 
     //⬛🟨🟩
-    String fileName = "wordle/resources/dictionary.txt";
-    //String fileName = "wordle/resources/extended-dictionary.txt";
+    //String fileName = "wordle/resources/dictionary.txt";
+    String fileName = "wordle/resources/extended-dictionary.txt";
     List<String> dictionary = null;
     final int num_guesses = 5;
     final long seed = 42;
@@ -44,65 +42,30 @@ public class Wordle {
 
     }
 
+    public int[] frequencyChcker(String fileName)
+    {
+        //TODO
+        int[] letterFrequency = new int[26];
+        try(BufferedReader reader = new BufferedReader(new FileReader(fileName)))
+        {
+            String line;
+            while((line = reader.readLine()) != null)
+            {
+                for(char letter : line.toCharArray())
+                {
+                    letterFrequency[letter - 'a'] ++;
+                }
+            }
+        }catch (IOException e)
+        {
+            System.err.println("Error");
+        }
+        return letterFrequency;
+    }
+
     public void play(String target) {
         // TODO
         // TODO: You have to fill in the code
-        /*for(int i = 0; i < num_guesses; ++i) {
-            String guess = getGuess();
-
-            if(guess.equals(target)) { // you won!
-                win(target);
-                return;
-            }
-
-            String[] guessArray = new String[5];
-            String[] targetArray = new String[5];
-            boolean[] isGreen = new boolean[5]; // track matched (green) positions
-
-            for(int j = 0; j < 5; j ++)
-            {
-                guessArray[j] = String.valueOf(guess.charAt(j));
-                targetArray[j] = String.valueOf(target.charAt(j));
-            }
-
-            // the hint is a string where green="+", yellow="o", grey="_"
-            // didn't win ;(
-            String [] hint = {"⬛", "⬛", "⬛", "⬛", "⬛"};
-
-            /*for (int k = 0; k < 5; k++) {
-                // TODO:
-                if(targetArray[k].equals(guessArray[k]))
-                {
-                    hint[k] = "+";
-                }
-            }
-
-
-            for (int k = 0; k < 5; k++) {
-                // TODO:
-                if(targetArray[k].equals(guessArray[k]))
-                {
-                    hint[k] = "\uD83D\uDFE9";
-                    isGreen[k] = true;
-                    targetArray[k] = "";
-                }
-            }
-            // set the arrays for yellow (present but not in right place), grey (not present)
-            // loop over each entry:
-            //  if hint == "+" (green) skip it
-            //  else check if the letter is present in the target word. If yes, set to "o" (yellow)
-            for (int k = 0; k < 5; k++) {
-                // TODO:
-                for(int j = 0; j < 5; j ++)
-                {
-                    if(guessArray[k].equals(targetArray[j]) && !(hint[j].equals("\uD83D\uDFE9")))
-                    {
-                        hint[k] = "\uD83D\uDFE8";
-                        targetArray[k] = "";
-                        break;
-                    }
-                }
-            }*/
 
         for (int i = 0; i < num_guesses; ++i) {
             String guess = getGuess();
@@ -114,7 +77,7 @@ public class Wordle {
 
             String[] guessArray = guess.split("");
             String[] targetArray = target.split("");
-            boolean[] isGreen = new boolean[5]; // track matched (green) positions
+            boolean[] isGreen = new boolean[5];
 
             // Initialize hints array with all misses
             String[] hint = {"⬛", "⬛", "⬛", "⬛", "⬛"};
@@ -122,7 +85,7 @@ public class Wordle {
             // First, check for correct positions (green)
             for (int k = 0; k < 5; k++) {
                 if (guessArray[k].equals(targetArray[k])) {
-                    hint[k] = "\uD83D\uDFE9"; // green square
+                    hint[k] = "\uD83D\uDFE9";
                     isGreen[k] = true;
                     targetArray[k] = ""; // remove the matched letter from the target
                 }
@@ -133,15 +96,11 @@ public class Wordle {
                 if (!isGreen[k] && target.contains(guessArray[k])) {
                     int targetIndex = target.indexOf(guessArray[k]);
                     if (targetIndex != -1 && !isGreen[targetIndex]) {
-                        hint[k] = "\uD83D\uDFE8"; // yellow square
-                        targetArray[targetIndex] = ""; // mark as processed
+                        hint[k] = "\uD83D\uDFE8";
+                        targetArray[targetIndex] = "";
                     }
                 }
             }
-
-
-
-
 
             // after setting the yellow and green positions, the remaining hint positions must be "not present" or "_"
             System.out.println("hint: " + Arrays.toString(hint));

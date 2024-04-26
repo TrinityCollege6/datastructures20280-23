@@ -99,7 +99,13 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
     @Override
     public V put(K key, V value) {
         // TODO
-        return null;
+        int h = hashValue(key);
+        V old = bucketPut(h, key, value);
+        if (old == null) {
+            // Increment size if a new entry is added
+            n++;
+        }
+        return old;
     }
 
     // private utilities
@@ -109,7 +115,7 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
      */
     private int hashValue(K key) {
         // TODO
-        return 0;
+        return (int) ((Math.abs(key.hashCode() * scale + shift) % prime) % capacity);
     }
 
     /**
